@@ -45,7 +45,7 @@ export async function POST(request: Request) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        sender: { name: 'E-Signature App', email: 'hello@yourdomain.com' }, // Ensure your Brevo sender is verified
+        sender: { name: 'E-Signature System', email: 'alfonzperez92@gmail.com' }, // Must match the verified Brevo login email
         to: [{ email: emailTo || 'alfonzperez92@gmail.com' }],
         subject: `Document Signed Successfully! (ID: ${documentId})`,
         htmlContent

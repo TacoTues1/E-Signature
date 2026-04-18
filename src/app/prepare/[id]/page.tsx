@@ -5,11 +5,9 @@ import { useRouter, useParams } from 'next/navigation';
 import { Loader2, Type, PenTool, CheckCircle, Move } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { supabase } from '@/lib/supabase';
-import { Document, Page, pdfjs } from 'react-pdf';
-import 'react-pdf/dist/Page/AnnotationLayer.css';
-import 'react-pdf/dist/Page/TextLayer.css';
+import dynamic from 'next/dynamic';
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+const PdfViewer = dynamic(() => import('@/components/PdfViewer'), { ssr: false });
 
 type Field = {
   id: string;
@@ -223,13 +221,7 @@ export default function PreparePage() {
               style={{ display: 'block' }} 
             />
           ) : documentUrl.startsWith('data:application/pdf') ? (
-            <Document file={documentUrl} loading={
-              <div className="w-[800px] h-[1000px] flex items-center justify-center bg-gray-50">
-                <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
-              </div>
-            }>
-              <Page pageNumber={1} width={800} renderTextLayer={false} renderAnnotationLayer={false} className="select-none pointer-events-none" />
-            </Document>
+            <PdfViewer documentUrl={documentUrl} width={800} />
           ) : (
              <div className="w-[800px] h-[1000px] flex items-center justify-center text-gray-400 bg-gray-50 border">
                Document Format Not Supported
