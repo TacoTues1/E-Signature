@@ -64,6 +64,10 @@ export default function SignPage() {
          if (data && !error) {
             if (data.file_url) setDocumentUrl(data.file_url);
             if (data.config) setFields(data.config);
+            if (data.email) {
+               // Store the recipient email from the database so the submit button uses the correct target!
+               localStorage.setItem(`email_${id}`, data.email); 
+            }
          }
        } catch (err) {
          console.warn("Supabase fetch failed, continuing with mock data.", err);
@@ -191,30 +195,34 @@ export default function SignPage() {
       </div>
 
       {/* Document Area */}
-      <div className="flex-1 overflow-auto p-4 md:p-8 flex justify-center items-start">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white shadow-xl relative touch-none"
-          style={{ width: '800px', transform: `scale(${scale})`, transformOrigin: 'top center' }}
+      <div className="flex-1 overflow-auto p-4 md:p-8 bg-gray-200">
+        <div 
+          className="mx-auto relative" 
+          style={{ width: 800 * scale, height: 1100 * scale }}
         >
-          {documentUrl.startsWith('data:image/') ? (
-            <img 
-              src={documentUrl} 
-              alt="Document to sign" 
-              className="w-full h-auto select-none pointer-events-none"
-              style={{ display: 'block' }} 
-            />
-          ) : documentUrl.startsWith('data:application/pdf') ? (
-            <PdfViewer documentUrl={documentUrl} width={800} />
-          ) : (
-            <div className="w-[800px] h-[1000px] bg-gray-50 flex items-center justify-center text-gray-300 border">
-              Document Format Not Supported
-            </div>
-          )}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white shadow-xl absolute top-0 left-0 touch-none"
+            style={{ width: '800px', transform: `scale(${scale})`, transformOrigin: 'top left' }}
+          >
+            {documentUrl.startsWith('data:image/') ? (
+              <img 
+                src={documentUrl} 
+                alt="Document to sign" 
+                className="w-full h-auto select-none pointer-events-none"
+                style={{ display: 'block' }} 
+              />
+            ) : documentUrl.startsWith('data:application/pdf') ? (
+              <PdfViewer documentUrl={documentUrl} width={800} />
+            ) : (
+              <div className="w-[800px] h-[1000px] bg-gray-50 flex items-center justify-center text-gray-300 border">
+                Document Format Not Supported
+              </div>
+            )}
 
-          {/* Interactive Fields Overlay */}
-          {fields.map(field => (
+            {/* Interactive Fields Overlay */}
+            {fields.map(field => (
             <div
               key={field.id}
               className="absolute group"
@@ -260,6 +268,7 @@ export default function SignPage() {
             </div>
           ))}
         </motion.div>
+        </div>
       </div>
 
       {/* Signature Modal */}

@@ -205,12 +205,16 @@ export default function PreparePage() {
       </div>
 
       {/* Document View Area */}
-      <div className="flex-1 overflow-auto p-4 md:p-8 flex justify-center items-start bg-gray-200">
+      <div className="flex-1 overflow-auto p-4 md:p-8 bg-gray-200">
+        <div 
+          className="mx-auto relative" 
+          style={{ width: 800 * scale, height: 1100 * scale }}
+        >
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: scale }}
-            style={{ transformOrigin: 'top center', width: '800px' }}
-            className="bg-white shadow-xl relative touch-none"
+            style={{ transformOrigin: 'top left', width: '800px' }}
+            className="bg-white shadow-xl absolute top-0 left-0 touch-none"
             ref={containerRef}
           >
           {documentUrl.startsWith('data:image/') ? (
@@ -265,6 +269,7 @@ export default function PreparePage() {
             </div>
           ))}
         </motion.div>
+        </div>
       </div>
     </div>
   );
